@@ -1,2 +1,7 @@
 # dnsupdate
-update dns and email alert
+Update cloudflare DNS records
+
+
+
+Improvements axes:
+- Use a loop to edit all domains
