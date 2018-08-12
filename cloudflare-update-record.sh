@@ -75,8 +75,8 @@ else
 fi
 
 if [ -f $id_file4 ] && [ $(wc -l $id_file4 | cut -d " " -f 1) == 2 ]; then
-    zone_identifier3=$(head -1 $id_file4)
-    record_identifier3=$(tail -1 $id_file4)
+    zone_identifier4=$(head -1 $id_file4)
+    record_identifier4=$(tail -1 $id_file4)
 else
     zone_identifier4=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone_name4" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" | grep -Po '(?<="id":")[^"]*' | head -1 )
     record_identifier4=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_identifier4/dns_records?name=$record_name4" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json"  | grep -Po '(?<="id":")[^"]*')
