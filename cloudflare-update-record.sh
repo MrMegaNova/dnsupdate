@@ -16,6 +16,9 @@ record_name3="ml"
 zone_name4=""
 record_name4=""
 
+zone_name5=""
+record_name5=""
+
 
 # MAYBE CHANGE THESE
 ip=$(curl -s http://ipv4.icanhazip.com)
@@ -24,6 +27,7 @@ id_file="cloudflare.ids"
 id_file2="cloudflare.ids2"
 id_file3="cloudflare.ids3"
 id_file4="cloudflare.ids4"
+id_file4="cloudflare.ids5"
 log_file="cloudflare.log"
 
 # LOGGER
@@ -84,10 +88,21 @@ else
     echo "$record_identifier4" >> $id_file4
 fi
 
+if [ -f $id_file5 ] && [ $(wc -l $id_file5 | cut -d " " -f 1) == 2 ]; then
+    zone_identifier5=$(head -1 $id_file5)
+    record_identifier5=$(tail -1 $id_file5)
+else
+    zone_identifier5=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$zone_name5" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" | grep -Po '(?<="id":")[^"]*' | head -1 )
+    record_identifier5=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$zone_identifier5/dns_records?name=$record_name5" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json"  | grep -Po '(?<="id":")[^"]*')
+    echo "$zone_identifier5" > $id_file5
+    echo "$record_identifier5" >> $id_file5
+fi
+
 update=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier/dns_records/$record_identifier" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier\",\"type\":\"A\",\"name\":\"$record_name\",\"content\":\"$ip\",\"proxied\":true}")
 update2=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier2/dns_records/$record_identifier2" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier2\",\"type\":\"A\",\"name\":\"$record_name2\",\"content\":\"$ip\",\"proxied\":true}")
 update3=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier3/dns_records/$record_identifier3" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier3\",\"type\":\"A\",\"name\":\"$record_name3\",\"content\":\"$ip\",\"proxied\":true}")
 update4=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier4/dns_records/$record_identifier4" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier4\",\"type\":\"A\",\"name\":\"$record_name4\",\"content\":\"$ip\",\"proxied\":true}")
+update5=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier5/dns_records/$record_identifier4" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier5\",\"type\":\"A\",\"name\":\"$record_name5\",\"content\":\"$ip\",\"proxied\":true}")
 
 
 
@@ -134,6 +149,18 @@ if [[ $update4 == *"\"success\":false"* ]]; then
     exit 1 
 else
     message="IP changed to: $ip on $zone_name4"
+    echo "$ip" > $ip_file
+    log "$message"
+    echo "$message"
+fi
+
+if [[ $update5 == *"\"success\":false"* ]]; then
+    message="API UPDATE FAILED. DUMPING RESULTS:\n$update5"
+    log "$message"
+    echo -e "$message"
+    exit 1 
+else
+    message="IP changed to: $ip on $zone_name5"
     echo "$ip" > $ip_file
     log "$message"
     echo "$message"
