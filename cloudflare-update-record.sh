@@ -11,7 +11,7 @@ zone_name2=""
 record_name2=""
 
 zone_name3=""
-record_name3="ml"
+record_name3=""
 
 zone_name4=""
 record_name4=""
@@ -27,7 +27,7 @@ id_file="cloudflare.ids"
 id_file2="cloudflare.ids2"
 id_file3="cloudflare.ids3"
 id_file4="cloudflare.ids4"
-id_file4="cloudflare.ids5"
+id_file5="cloudflare.ids5"
 log_file="cloudflare.log"
 
 # LOGGER
@@ -102,7 +102,7 @@ update=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identi
 update2=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier2/dns_records/$record_identifier2" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier2\",\"type\":\"A\",\"name\":\"$record_name2\",\"content\":\"$ip\",\"proxied\":true}")
 update3=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier3/dns_records/$record_identifier3" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier3\",\"type\":\"A\",\"name\":\"$record_name3\",\"content\":\"$ip\",\"proxied\":true}")
 update4=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier4/dns_records/$record_identifier4" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier4\",\"type\":\"A\",\"name\":\"$record_name4\",\"content\":\"$ip\",\"proxied\":true}")
-update5=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier5/dns_records/$record_identifier4" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier5\",\"type\":\"A\",\"name\":\"$record_name5\",\"content\":\"$ip\",\"proxied\":true}")
+update5=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$zone_identifier5/dns_records/$record_identifier5" -H "X-Auth-Email: $auth_email" -H "X-Auth-Key: $auth_key" -H "Content-Type: application/json" --data "{\"id\":\"$zone_identifier5\",\"type\":\"A\",\"name\":\"$record_name5\",\"content\":\"$ip\",\"proxied\":true}")
 
 
 
